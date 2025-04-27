@@ -3,9 +3,13 @@ import { FaCartShopping } from 'react-icons/fa6';
 import NavLink from './NavLink';
 import { useState } from "react";
 import HamburgerToggle from './HamburgerToggle';
+import { useGetCartStatQuery } from '../../services/marketShellApi';
 
 function NavBar() {
     const [isOpen, setIsOpen] = useState(false);
+
+    const cart_code = localStorage.getItem('cart_code')
+    const {data} = useGetCartStatQuery({cart_code});
 
     return (
         <nav className="sticky top-0 z-[1030] bg-white shadow-sm py-3">
@@ -17,7 +21,7 @@ function NavBar() {
                     <HamburgerToggle onClick={() => setIsOpen(!isOpen)} />
                 </div>
 
-                <div className={`w-full lg:flex lg:items-center lg:w-auto ${isOpen ? 'block' : 'hidden'}`}>
+                <div className={`w-full ${isOpen? 'block' : 'hidden'} lg:!flex lg:items-center lg:w-auto`}>
                     <NavLink />
 
                     <Link
@@ -26,8 +30,9 @@ function NavBar() {
                     >
                         <FaCartShopping />
                         <span className="absolute -top-2 -right-2 text-xs px-2 py-1 rounded-full text-white" style={{ backgroundColor: '#6050DC' }}>
-                            12
-                        </span>
+                            {data?.num_of_items || 0}
+                        </span> 
+                        
                     </Link>
                 </div>
             </div>

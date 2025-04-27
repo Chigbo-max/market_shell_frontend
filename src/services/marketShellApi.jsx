@@ -20,15 +20,34 @@ export const marketShellApi = createApi({
       method: 'POST',
       body: data,
     }),
+    invalidatesTags:['cartStats'] //inavlidate after adding item
   }),
 
-  getProducts: build.query({
-    query: () => '/product_in_cart',
+  getProductInCart: build.query({
+    query: ({cart_code, product_id}) => `/product_in_cart?cart_code=${cart_code}&product_id=${product_id}`,
   }),
+
+  getCartStat:build.query({
+    query:({cart_code})=>`/cart_stat?cart_code=${cart_code}`,
+    providesTags:['cartStats'] //automatically update after adding item
+  }),
+
+  getCart:build.query({
+    query:({cart_code})=>`/cart?cart_code=${cart_code}`,
+    providesTags:['cartStats']
+  }),
+
+  getQuantityUpdate:build.mutation({
+    query:((data)=>({
+      url: '/quantity_update/',
+      method:'PATCH',
+      body: data
+    }))
+  })
 
 })
 })
 
 
-export const { useGetProductsQuery,
+export const {useGetQuantityUpdateMutation, useGetCartQuery, useGetCartStatQuery, useGetProductInCartQuery, useGetProductsQuery,
    useGetProductDetailQuery, usePostAddItemMutation } = marketShellApi

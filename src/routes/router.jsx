@@ -3,11 +3,16 @@ import MainLayout from "../layout/mainLayout"
 import HomePage from "../components/ui/home/HomePage"
 import NotFound from "../components/ui/NotFound"
 import ProductPage from "../components/ui/products/ProductPage"
+import CartPage from "../components/ui/cart/CartPage"
+
+
+
 
 const browserRouter = createBrowserRouter([
+
     {
         path: "/",
-        element: <MainLayout />,
+        element: <MainLayout/>,
         children: [
             {
                 path: "/",
@@ -21,6 +26,11 @@ const browserRouter = createBrowserRouter([
             {
                 path:"/detail/:slug",
                 element:<ProductPage/>
+            },
+
+            {
+                path:"/cart",
+                element:<CartPage/>
             }
 
             // {
