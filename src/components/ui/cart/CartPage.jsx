@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CartItem from './CartItem';
 import CartSummary from './CartSummary';
 import { useGetCartQuery } from '../../../services/marketShellApi';
 import {Link} from "react-router-dom";
+import {ClipLoader} from "react-spinners"
 
 function CartPage() {
 
   const cart_code = localStorage.getItem('cart_code');
   const shouldRefetch = cart_code;
-  const{data, isLoading} = useGetCartQuery({cart_code}, {skip: !shouldRefetch});
+  const{data, isLoading, refetch} = useGetCartQuery({cart_code}, {skip: !shouldRefetch});
+
   const tax = 0.04;
+
+  if(isLoading){
+    return(
+      <div className="w-full flex justify-center items-center">
+      <ClipLoader
+      color='#6050dce4'
+      size={150}
+      aria-label="Loading Spinner"
+      data-testid="loader"
+    /></div>
+    )
+  }
 
   if (!data?.items?.length){
     return (
@@ -37,7 +51,9 @@ function CartPage() {
 
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-1 space-y-4">
-          <CartItem data={data} />
+          {data?.items?.map((item)=>
+          <CartItem item={item} key={item.id} refetch={refetch} />
+             )}
         </div>
 
         <div className="lg:w-1/3 w-full">
